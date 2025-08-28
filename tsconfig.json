@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES6",                          // biên dịch code ra JS ES6
+    "module": "commonjs",                     // dùng CommonJS (require), hợp với Node.js nếu không xài "type": "module"
+    "strict": true,                           // bật strict mode TypeScript
+    "esModuleInterop": true,                  // cho phép import mặc dù module là CommonJS
+    "skipLibCheck": true,                     // bỏ qua check type trong node_modules
+    "forceConsistentCasingInFileNames": true, // tránh lỗi do khác biệt chữ hoa/thường
+    "outDir": "./dist",                       // folder chứa file JS sau khi build
+    "rootDir": "./src"                        // folder chứa code TS gốc
+  },
+  "include": ["src/**/*"],                   // include tất cả file trong src
+  "exclude": ["node_modules"]                // bỏ qua node_modules
+}
