@@ -1,0 +1,59 @@
+# Node modules
+node_modules/
+
+# Build outputs
+dist/
+build/
+lib/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environmental variables
+.env
+.env.*           # Ví dụ: .env.local, .env.production
+!.env.example   # Cho phép .env.example để chia sẻ cấu hình mẫu
+# Nội dung lấy từ nguồn: JavaScript Nexus  
+# :contentReference[oaicite:0]{index=0}
+
+# Testing & Coverage
+coverage/
+*.lcov
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# System files
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+*.d.ts
+# Nếu bạn compile TS sang JS và commit JS, hãy điều chỉnh theo thực tế
+
+# Gitignore Templates từ Node.js projects
+logs
+pids
+*.pid
+*.seed
+*.pid.lock
+.npm
+.cache
+.eslintcache
+.node_repl_history
+# Theo hướng dẫn Mastering .gitignore in Node.js projects  
+# :contentReference[oaicite:1]{index=1}
+
+# Ignore .env by default (nhắc giữ bảo mật)  
+# Từ bài viết Node.js 2025 Guide  
+# :contentReference[oaicite:2]{index=2}
