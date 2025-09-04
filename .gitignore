@@ -51,9 +51,4 @@ pids
 .cache
 .eslintcache
 .node_repl_history
-# Theo hướng dẫn Mastering .gitignore in Node.js projects  
-# :contentReference[oaicite:1]{index=1}
 
-# Ignore .env by default (nhắc giữ bảo mật)  
-# Từ bài viết Node.js 2025 Guide  
-# :contentReference[oaicite:2]{index=2}
