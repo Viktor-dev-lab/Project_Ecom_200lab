@@ -4,8 +4,12 @@ import { deleteCategoryApi } from "./infras/delete-api";
 import { getCategoryApi } from "./infras/get-api";
 import { listCategoryApi } from "./infras/list-api";
 import { updateCategoryApi } from "./infras/update-api";
+import { Sequelize } from 'sequelize';
+import { init } from './infras/repository/dto'
 
-export const setupCategoryModule = () => {
+export const setupCategoryModule = (sequelize: Sequelize) => {
+  init(sequelize);
+
   const router = Router();
 
   router.get('/categories', listCategoryApi);

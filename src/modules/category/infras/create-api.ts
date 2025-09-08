@@ -1,43 +1,26 @@
 import express, { Express, Request, Response } from "express";
+import { CategoryCreateSchema } from "../model/dto";
+import { v7 } from "uuid";
+import { z } from 'zod';
+import { CategoryModel } from "./repository/dto";
 
-export const createCategoryApi = (req: Request, res: Response) => {
-  // const parseResult = CategoryCreateSchema.safeParse(req.body);
+export async function createCategoryApi(req: Request, res: Response): Promise<void> {
+  const { success, data, error } = CategoryCreateSchema.safeParse(req.body);
 
-  // if (!parseResult.success) {
-  //   const tree = z.treeifyError(parseResult.error);
+  if (!success) {
+    const tree = z.treeifyError(error);
+    res.status(400).json({
+      message: tree,
+    });
 
-  //   return res.status(400).json({
-  //     code: 400,
-  //     message: "Validation error",
-  //     errors: tree,
-  //   });
-  // }
+    return;
+  }
 
-  // const { name, image, description, parentId } = parseResult.data;
-
-  // // Tạo id mới
-  // const maxId = categories.length > 0
-  //   ? Math.max(...categories.map(category => Number(category.id)))
-  //   : 0;
-
-  // const newId = maxId + 1;
-
-  // const category: Category = {
-  //   id: String(newId),
-  //   name,
-  //   image,
-  //   description,
-  //   parentId,
-  //   position: categories.length + 1,
-  //   status: CategoryStatus.Active,
-  //   createdAt: new Date(),
-  //   updatedAt: new Date(),
-  // };
-
-  // categories.push(category);
+  const newId = v7();
+  await CategoryModel.create({ id: newId, ...data });
 
   res.status(201).json({
-    data: [],
+    data: newId,
     code: 200,
   });
 }

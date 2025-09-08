@@ -2,12 +2,11 @@ import { z } from 'zod';
 import { CategoryStatus } from './model'
 
 export const CategoryUpdateSchema = z.object({
-  id: z.string(),
-  name: z.string(),
+  name: z.string().min(3, 'name must be at least 3 characters').optional(),
   image: z.string().optional(),
-  description: z.string().optional(),
-  parentId: z.string().nullable().optional(),
-  status: z.enum(CategoryStatus),
+  description: z.string().max(255, 'description must be at most 255 characters').optional(),
+  parentId: z.uuid().nullable().optional(),
+  status: z.enum(CategoryStatus).optional(),
 });
 
 export type CategoryUpdateDTO = z.infer<typeof CategoryUpdateSchema>;
