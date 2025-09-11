@@ -3,8 +3,13 @@ import { CategoryStatus } from '../../model/model';
 
 export class CategoryModel extends Model {
   declare id: string;
-  public name!: string;
-  public status!: CategoryStatus;
+  declare name: string;
+  declare status: CategoryStatus;
+  declare image?: string;
+  declare description?: string;
+  declare parentId?: string;
+  declare created_at: Date;
+  declare updated_at: Date;
 }
 
 export const modelName = "Category";

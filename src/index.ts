@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import { config } from "dotenv";
-import { setupCategoryModule } from "./modules/category/index";
+import { setupCategoryHexagon } from "./modules/category/index";
 import { sequelize } from "./share/component/sequelize";
 
 // Load environment variables
@@ -21,7 +21,7 @@ app.get("/", (req: Request, res: Response) => {
   res.status(200).send("Hello 200Lab!");
 });
 
-app.use("/v1", setupCategoryModule(sequelize));
+app.use("/v1", setupCategoryHexagon(sequelize));
 
 // database connection
 const startServer = async () => {
