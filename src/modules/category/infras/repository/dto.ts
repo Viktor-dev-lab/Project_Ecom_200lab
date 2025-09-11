@@ -48,13 +48,19 @@ export function init(sequelize: Sequelize) {
         allowNull: false,
         defaultValue: "active",
       },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: "created_at", // map từ DB -> camelCase
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: "updated_at", // map từ DB -> camelCase
+      },
     },
     {
       sequelize,
       modelName: modelName,
       timestamps: true,
-      createdAt: "created_at",
-      updatedAt: "updated_at",
       tableName: "categories",
     }
   );
