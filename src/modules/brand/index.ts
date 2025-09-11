@@ -2,15 +2,13 @@ import { Router } from "express";
 import { Sequelize } from 'sequelize';
 import { init } from './infras/repository/dto'
 import { MySQLBrandRepository } from '../brand/infras/repository/repo';
-
-import { modelName } from './infras/repository/dto'
 import { BrandUseCase } from "./usecase";
 import { BrandHttpService } from "./infras/transport/http-service";
 
 export const setupBrandHexagon = (sequelize: Sequelize) => {
   init(sequelize);
 
-  const repository = new MySQLBrandRepository(sequelize, modelName);
+  const repository = new MySQLBrandRepository(sequelize);
   const useCase = new BrandUseCase(repository);
   const httpService = new BrandHttpService(useCase);
 

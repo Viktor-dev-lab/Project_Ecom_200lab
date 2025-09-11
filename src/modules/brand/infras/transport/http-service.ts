@@ -3,7 +3,6 @@ import {BrandCreateSchema, BrandUpdateSchema, BrandFilterDTOSchema} from "../../
 import {IBrandUseCase} from "../../interface"
 import {z} from 'zod'
 import { PagingDTOSchema } from "../../../../share/model/paging";
-import type { Brand } from '../../model/model';
 
 export class BrandHttpService {
   constructor(private readonly useCase: IBrandUseCase) {}

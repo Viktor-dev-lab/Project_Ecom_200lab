@@ -5,6 +5,7 @@ export interface IRepository<Entity, Filter, updateDTO> extends IQueryRepository
 export interface IQueryRepository<Entity, Filter> {
   get(id: string): Promise<Entity | null>;
   list(filter: Filter, paging: PagingDTO): Promise<Array<Entity>>;
+  findByCond(cond: Filter): Promise<Entity | null>;
 }
 
 export interface ICommandRepository<Entity, updateDTO> {

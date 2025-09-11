@@ -1,15 +1,19 @@
 import {Brand, BrandStatus} from "../model/model"
-import {BrandUpdateDTO, BrandCreateDTO, BrandFilterDTO} from "../model/dto"
-import {IBrandUseCase} from "../interface/index";
+import {BrandUpdateDTO, BrandCreateDTO, BrandFilterDTO, BrandCreateSchema} from "../model/dto"
+import {IBrandUseCase, IBrandRepository} from "../interface/index";
 import { v7 } from "uuid";
 import { ErrorDataNotFound } from "../../../share/model/base-errors";
 import type { PagingDTO } from "../../../share/model/paging";
-import type { IRepository } from "../../../share/interface";
 
 export class BrandUseCase implements IBrandUseCase{
-  constructor(private readonly repository: IRepository<Brand, BrandFilterDTO, BrandUpdateDTO>){}
+  constructor(private readonly repository: IBrandRepository){}
 
   async createBrand(data: BrandCreateDTO): Promise<string>{
+    const isExist = await this.repository.findByCond({name: data.name});
+    if (isExist){
+      throw new Error('Brand name already exists');
+    }
+
     const newID = v7();
     const Brand: Brand = {
       id: newID,

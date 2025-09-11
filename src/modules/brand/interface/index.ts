@@ -1,4 +1,5 @@
 import {PagingDTO} from "../../../share/model/paging"
+import {IRepository} from "../../../share/interface"
 import {BrandUpdateDTO, BrandCreateDTO, BrandFilterDTO} from "../model/dto"
 import {Brand} from "../model/model"
 
@@ -10,15 +11,4 @@ export interface IBrandUseCase {
   deleteBrand(id: string): Promise<boolean>;
 }
 
-export interface IRepository extends IQueryRepository, ICommandRepository {}
-
-export interface IQueryRepository {
-  get(id: string): Promise<Brand | null>;
-  list(filter: BrandFilterDTO, paging: PagingDTO): Promise<Array<Brand>>;
-}
-
-export interface ICommandRepository {
-  insert(data: Brand): Promise<boolean>;
-  update(id: string, data: BrandUpdateDTO): Promise<boolean>;
-  delete(id: string): Promise<boolean>;
-}
+export interface IBrandRepository extends IRepository<Brand, BrandFilterDTO, BrandUpdateDTO> {}

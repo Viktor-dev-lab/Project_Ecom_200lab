@@ -1,61 +1,11 @@
-import {PagingDTO} from "../../../../share/model/paging";
-import {IRepository} from "../../interface";
 import {CategoryUpdateDTO} from "../../model/dto";
-import {Category, CategoryStatus} from "../../model/model";
+import {Category} from "../../model/model";
 import {CategoryFilterDTO} from "../../model/dto";
-import {Op, Sequelize } from "sequelize";
+import {Sequelize } from "sequelize";
+import { BaseRepositorySequelize } from "../../../../share/repository/sequelize";
 
-export class MySQLCategoryRepository implements IRepository {
-  constructor(private readonly sequelize: Sequelize, private readonly modelName: string) {}
-
-  async get(id: string): Promise<Category | null> {
-    const data = await this.sequelize.models[this.modelName].findByPk(id);
-
-    if (!data) {
-      return null;
-    }
-
-    return data.get({ plain: true }) as Category; // mai xem nguyên nhân lỗi date khi không dùng as category
-  }
-
-   async list(filter: CategoryFilterDTO, paging: PagingDTO): Promise<Array<Category>> {
-    const { page, limit } = paging;
-
-    const condSQL = { ...filter, status: { [Op.ne]: CategoryStatus.DELETED } };
-
-    const total = await this.sequelize.models[this.modelName].count({ where: condSQL });
-    paging.total = total;
-
-    const rows = await this.sequelize.models[this.modelName].findAll({ 
-      where: condSQL, 
-      limit, 
-      offset: (page - 1) * limit, 
-      order: [['id', 'DESC']],
-     });
-
-    return rows.map((row) => row.get({ plain: true }));
-  }
-
-  async insert(data: Category): Promise<boolean> {
-    await this.sequelize.models[this.modelName].create(data);
-    return true;
-  }
-
-  async update(id: string, data: CategoryUpdateDTO): Promise<boolean> {
-    await this.sequelize.models[this.modelName].update(
-      {...data, updatedAt: new Date(),}, 
-      { where: { id } }
-    );
-    return true;
-
-  }
-  async delete(id: string, isHard: boolean = false): Promise<boolean>{
-     if (!isHard) {
-      await this.sequelize.models[this.modelName].update({ status: CategoryStatus.DELETED }, { where: { id } });
-    } else {
-      await this.sequelize.models[this.modelName].destroy({ where: { id } });
-    }
-
-    return true;
-  }
+export class MySQLCategoryRepository extends BaseRepositorySequelize<Category, CategoryFilterDTO, CategoryUpdateDTO> {
+  constructor(sequelize: Sequelize) {
+    super(sequelize, "Category");
+   }
 }

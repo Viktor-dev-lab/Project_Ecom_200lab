@@ -4,12 +4,17 @@ import {ICategoryUseCase} from "../interface/index";
 import { v7 } from "uuid";
 import { ErrorDataNotFound } from "../../../share/model/base-errors";
 import type { PagingDTO } from "../../../share/model/paging";
-import type { IRepository } from "../../../share/interface";
+import type { ICategoryRepository } from "../interface";
 
 export class CategoryUseCase implements ICategoryUseCase{
-  constructor(private readonly repository: IRepository<Category, CategoryFilterDTO, CategoryUpdateDTO>){}
+  constructor(private readonly repository: ICategoryRepository){}
 
   async createCategory(data: CategoryCreateDTO): Promise<string>{
+    const isExist = await this.repository.findByCond({ name: data.name });
+    if (isExist) {
+      throw new Error('Category name already exists');
+    }
+
     const newID = v7();
     const category: Category = {
       id: newID,
