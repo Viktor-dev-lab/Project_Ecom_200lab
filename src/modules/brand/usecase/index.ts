@@ -1,12 +1,13 @@
 import {Brand, BrandStatus} from "../model/model"
 import {BrandUpdateDTO, BrandCreateDTO, BrandFilterDTO} from "../model/dto"
-import {IRepository, IBrandUseCase} from "../interface/index";
+import {IBrandUseCase} from "../interface/index";
 import { v7 } from "uuid";
 import { ErrorDataNotFound } from "../../../share/model/base-errors";
 import type { PagingDTO } from "../../../share/model/paging";
+import type { IRepository } from "../../../share/interface";
 
 export class BrandUseCase implements IBrandUseCase{
-  constructor(private readonly repository: IRepository){}
+  constructor(private readonly repository: IRepository<Brand, BrandFilterDTO, BrandUpdateDTO>){}
 
   async createBrand(data: BrandCreateDTO): Promise<string>{
     const newID = v7();

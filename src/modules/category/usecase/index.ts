@@ -1,12 +1,13 @@
 import {Category, CategoryStatus} from "../model/model"
 import {CategoryUpdateDTO, CategoryCreateDTO, CategoryFilterDTO} from "../model/dto"
-import {IRepository, ICategoryUseCase} from "../interface/index";
+import {ICategoryUseCase} from "../interface/index";
 import { v7 } from "uuid";
 import { ErrorDataNotFound } from "../../../share/model/base-errors";
 import type { PagingDTO } from "../../../share/model/paging";
+import type { IRepository } from "../../../share/interface";
 
 export class CategoryUseCase implements ICategoryUseCase{
-  constructor(private readonly repository: IRepository){}
+  constructor(private readonly repository: IRepository<Category, CategoryFilterDTO, CategoryUpdateDTO>){}
 
   async createCategory(data: CategoryCreateDTO): Promise<string>{
     const newID = v7();
