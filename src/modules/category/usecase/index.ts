@@ -57,6 +57,6 @@ export class CategoryUseCase implements ICategoryUseCase{
     if (!category || category.status === CategoryStatus.DELETED){
       throw ErrorDataNotFound;
     }
-    return await this.repository.delete(id);
+    return await this.repository.delete(id, false);
   }
 }

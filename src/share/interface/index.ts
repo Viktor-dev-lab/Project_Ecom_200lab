@@ -11,5 +11,13 @@ export interface IQueryRepository<Entity, Filter> {
 export interface ICommandRepository<Entity, updateDTO> {
   insert(data: Entity): Promise<boolean>;
   update(id: string, data: updateDTO): Promise<boolean>;
-  delete(id: string): Promise<boolean>;
+  delete(id: string, isHardDelete: boolean): Promise<boolean>;
+}
+
+export interface ICommandHandler<Cmd, Result> {
+  execute(command: Cmd): Promise<Result>;
+}
+
+export interface IQueryHandler<Query, Result> {
+  query(query: Query): Promise<Result>;
 }

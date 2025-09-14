@@ -11,4 +11,27 @@ export interface IBrandUseCase {
   deleteBrand(id: string): Promise<boolean>;
 }
 
+export interface CreateCommand {
+  cmd: BrandCreateDTO;
+}
+
+export interface GetDetailQuery {
+  id: string;
+}
+
+export interface ListQuery{
+  filter: BrandFilterDTO;
+  paging: PagingDTO;
+}
+
+export interface UpdateCommand {
+  id: string;
+  dto: BrandUpdateDTO;
+}
+
+export interface DeleteCommand {
+  id: string;
+  isHardDelete: boolean;
+}
+
 export interface IBrandRepository extends IRepository<Brand, BrandFilterDTO, BrandUpdateDTO> {}

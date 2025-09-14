@@ -1,12 +1,21 @@
 import {Request, Response} from 'express'
-import {BrandCreateSchema, BrandUpdateSchema, BrandFilterDTOSchema} from "../../model/dto"
-import {IBrandUseCase} from "../../interface"
+import {BrandCreateSchema, BrandUpdateSchema, BrandFilterDTOSchema, BrandFilterDTO, BrandUpdateDTO} from "../../model/dto"
+import {CreateCommand, GetDetailQuery, type DeleteCommand, type UpdateCommand} from "../../interface"
 import {z} from 'zod'
-import { PagingDTOSchema } from "../../../../share/model/paging";
+import { PagingDTOSchema, type PagingDTO } from "../../../../share/model/paging";
+import type { Brand } from '../../model/model';
+import type { ICommandHandler, IQueryHandler } from '../../../../share/interface';
 
 export class BrandHttpService {
-  constructor(private readonly useCase: IBrandUseCase) {}
 
+  constructor(
+    private readonly createCmdHandler: ICommandHandler<CreateCommand, string>,
+    private readonly getDetailQueryHandler: IQueryHandler<GetDetailQuery, Brand | null>,
+    private readonly deleteCmdHandler: ICommandHandler<DeleteCommand, boolean>,
+    private readonly updateCmdHandler: ICommandHandler<UpdateCommand, boolean>,
+    private readonly listQueryHandler: IQueryHandler<{filter: BrandFilterDTO, paging: PagingDTO}, Brand[]>,
+  ) {}
+  
   async createBrandAPI(req: Request, res: Response){
       const { success, data, error } = BrandCreateSchema.safeParse(req.body);
     
@@ -19,13 +28,14 @@ export class BrandHttpService {
         return;
       }
 
-      const result = await this.useCase.createBrand(data);
+      const command: CreateCommand = { cmd: data };
+      const result = await this.createCmdHandler.execute(command);
       res.status(200).json({data: result});
   }
 
   async getDetailBrandAPI(req: Request, res: Response){
     const { id } = req.params;
-    const brand = await this.useCase.getDetailBrand(id);  
+    const brand = await this.getDetailQueryHandler.query({ id });
     res.status(200).json({data: brand});
   }
 
@@ -43,14 +53,14 @@ export class BrandHttpService {
         return;
       }
 
-      const result = await this.useCase.updateBrand(id, data);
+      const result = await this.updateCmdHandler.execute({id, dto: data});
       res.status(200).json({data: result});
 
   }
 
   async deleteBrandAPI(req: Request, res: Response) {
     const { id } = req.params;
-    const result = await this.useCase.deleteBrand(id);
+    const result = await this.deleteCmdHandler.execute({ id, isHardDelete: false });
     res.status(200).json({ data: result });
   }
 
@@ -68,9 +78,7 @@ export class BrandHttpService {
     }
 
     const cond = BrandFilterDTOSchema.parse(req.query);
-    const result = await this.useCase.listBrand(cond, paging);
-    console.log(result);
-
+    const result = await this.listQueryHandler.query({ filter: cond, paging });
     res.status(200).json({ data: result, paging, filter: cond });
   }
 }

@@ -1,4 +1,5 @@
 export const ErrorDataNotFound = new Error("Data Not Found");
+export const ErrNameDuplicate = new Error("Name already exists");
 
 
 

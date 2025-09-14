@@ -1,10 +1,10 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import { BrandStatus } from '../../model/model';
+import type { ModelStatus } from "../../../../share/model/base-model";
 
 export class BrandModel extends Model {
   declare id: string;
   declare name: string;
-  declare status: BrandStatus;
+  declare status: ModelStatus;
   declare image?: string | null;
   declare description?: string | null;
   declare tag_line?: string | null;
