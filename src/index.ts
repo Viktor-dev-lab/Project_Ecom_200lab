@@ -1,8 +1,9 @@
+import 'module-alias/register';
 import express, { Express, Request, Response } from "express";
 import { config } from "dotenv";
-import { setupCategoryHexagon } from "./modules/category/index";
-import { setupBrandHexagon } from "./modules/brand/index";
-import { sequelize } from "./share/component/sequelize";
+import { setupCategoryHexagon } from "@modules/category/index";
+import { setupBrandHexagon } from "@modules/brand/index";
+import { sequelize } from "@share/component/sequelize";
 
 // Load environment variables
 config();
