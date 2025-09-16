@@ -5,11 +5,12 @@ import { MySQLCategoryRepository } from '../category/infras/repository/repo';
 
 import { CategoryUseCase } from "./usecase";
 import { CategoryHttpService } from "./infras/transport/http-service";
+import { modelName } from "./infras/repository/dto";
 
 export const setupCategoryHexagon = (sequelize: Sequelize) => {
   init(sequelize);
 
-  const repository = new MySQLCategoryRepository(sequelize);
+  const repository = new MySQLCategoryRepository(sequelize, modelName);
   const useCase = new CategoryUseCase(repository);
   const httpService = new CategoryHttpService(useCase);
 

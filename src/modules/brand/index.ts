@@ -8,11 +8,12 @@ import { GetBrandDetailQuery } from "./usecase/query/get-brand-detail";
 import { DeleteBrandCommandHandler } from "./usecase/command/delete-brand";
 import { UpdateBrandCommandHandler } from "./usecase/command/update-brand";
 import { ListBrandQueryHandler } from "./usecase/query/list-brand";
+import {modelName} from "./infras/repository/dto";
 
 export const setupBrandHexagon = (sequelize: Sequelize) => {
   init(sequelize);
 
-  const repository = new MySQLBrandRepository(sequelize);
+  const repository = new MySQLBrandRepository(sequelize, modelName);
 
   const createCmdHandler = new CreateNewBrandCmdHandler(repository);
   const getDetailQueryHandler = new GetBrandDetailQuery(repository);
