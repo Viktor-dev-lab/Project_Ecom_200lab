@@ -16,11 +16,11 @@ export const setupCategoryHexagon = (sequelize: Sequelize) => {
 
   const router = Router();
 
-  router.post('/categories', httpService.createCategoryAPI.bind(httpService));
-  router.get('/categories/:id', httpService.getDetailCategoryAPI.bind(httpService));
-  router.get('/categories', httpService.listCategoryAPI.bind(httpService));
-  router.patch('/categories/:id', httpService.updateCategoryAPI.bind(httpService));
-  router.delete('/categories/:id', httpService.deleteCategoryAPI.bind(httpService));
+  router.post('/categories', httpService.createAPI.bind(httpService));
+  router.get('/categories/:id', httpService.getDetailAPI.bind(httpService));
+  router.get('/categories', httpService.listAPI.bind(httpService));
+  router.patch('/categories/:id', httpService.updateAPI.bind(httpService));
+  router.delete('/categories/:id', httpService.deleteAPI.bind(httpService));
 
   return router;
 }

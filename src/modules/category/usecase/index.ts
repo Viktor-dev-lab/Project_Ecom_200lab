@@ -7,12 +7,13 @@ import type { PagingDTO } from "../../../share/model/paging";
 import type { ICategoryRepository } from "../interface";
 
 export class CategoryUseCase implements ICategoryUseCase{
-  constructor(private readonly repository: ICategoryRepository){}
+  constructor(private readonly repository: ICategoryRepository) { }
 
-  async createCategory(data: CategoryCreateDTO): Promise<string>{
+  async create(data: CategoryCreateDTO): Promise<string>{
     const isExist = await this.repository.findByCond({ name: data.name });
+
     if (isExist) {
-      throw new Error('Category name already exists');
+      throw { statusCode: 409, message: "Category already exists" };
     }
 
     const newID = v7();
@@ -22,7 +23,7 @@ export class CategoryUseCase implements ICategoryUseCase{
       image: data.image,
       description: data.description,
       position: 0,
-      status: CategoryStatus.ACTIVE,
+      status: CategoryStatus.ACTIVE,  
       createdAt: new Date(),
       updatedAt: new Date(),
     }
@@ -30,7 +31,7 @@ export class CategoryUseCase implements ICategoryUseCase{
     return newID;
   }
 
-  async getDetailCategory(id: string): Promise<Category | null> {
+  async getDetail(id: string): Promise<Category | null> {
     const data = await this.repository.get(id);
     if (!data || data.status === CategoryStatus.DELETED){
       throw ErrorDataNotFound;
@@ -39,12 +40,12 @@ export class CategoryUseCase implements ICategoryUseCase{
     return data;
   }
 
-  async listCategory(filter: CategoryFilterDTO, paging: PagingDTO): Promise<Array<Category>>{
+  async list(filter: CategoryFilterDTO, paging: PagingDTO): Promise<Array<Category>>{
     const data = this.repository.list(filter, paging);
     return data;
   }
 
-  async updateCategory(id: string, data: CategoryUpdateDTO): Promise<boolean> {
+  async update(id: string, data: CategoryUpdateDTO): Promise<boolean> {
     const category = await this.repository.get(id);
     if (!category || category.status === CategoryStatus.DELETED){
       throw ErrorDataNotFound;
@@ -52,7 +53,7 @@ export class CategoryUseCase implements ICategoryUseCase{
     return await this.repository.update(id, data);
   }
 
-  async deleteCategory(id: string): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     const category = await this.repository.get(id);
     if (!category || category.status === CategoryStatus.DELETED){
       throw ErrorDataNotFound;

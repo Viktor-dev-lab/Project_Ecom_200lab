@@ -5,7 +5,7 @@ import z from "zod";
 
 export abstract class BaseHttpService<CreateDTO, UpdateDTO, Entity, Filter> {
   constructor(
-    private readonly useCase: IUseCase<CreateDTO, UpdateDTO, Entity, Filter>,
+    public readonly useCase: IUseCase<CreateDTO, UpdateDTO, Entity, Filter>,
     private readonly CreateDTOSchema: z.ZodType<CreateDTO>,
     private readonly UpdateDTOSchema: z.ZodType<UpdateDTO>,
     private readonly FilterDTOSchema: z.ZodType<Filter>
@@ -25,8 +25,12 @@ export abstract class BaseHttpService<CreateDTO, UpdateDTO, Entity, Filter> {
 
       const result = await this.useCase.create(data);
       res.status(200).json({ data: result });
-    } catch (err) {
-      res.status(500).json({ message: 'Internal server error', error: err });
+    } catch (err: any) {
+      if (err.statusCode) {
+        res.status(err.statusCode).json({ message: err.message });
+      } else {
+        res.status(500).json({ message: "Internal server error" });
+      }
     }
   }
 
