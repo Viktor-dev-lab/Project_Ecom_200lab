@@ -29,7 +29,8 @@ export abstract class BaseHttpService<CreateDTO, UpdateDTO, Entity, Filter> {
       if (err.statusCode) {
         res.status(err.statusCode).json({ message: err.message });
       } else {
-        res.status(500).json({ message: "Internal server error" });
+        console.log(err);
+        res.status(500).json({ message: 'Internal server error', error: err });
       }
     }
   }

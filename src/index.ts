@@ -4,6 +4,7 @@ import { config } from "dotenv";
 import { setupCategoryHexagon } from "@modules/category/index";
 import { setupBrandHexagon } from "@modules/brand/index";
 import { sequelize } from "@share/component/sequelize";
+import { setupProductHexagon } from './modules/product';
 
 // Load environment variables
 config();
@@ -25,6 +26,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/v1", setupCategoryHexagon(sequelize));
 app.use("/v1", setupBrandHexagon(sequelize));
+app.use("/v1", setupProductHexagon(sequelize));
 
 // database connection
 const startServer = async () => {
