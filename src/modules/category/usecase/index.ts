@@ -13,7 +13,7 @@ export class CategoryUseCase implements ICategoryUseCase{
     const isExist = await this.repository.findByCond({ name: data.name });
 
     if (isExist) {
-      throw { statusCode: 409, message: "Category already exists" };
+      throw { message: "Category already exists" };
     }
 
     const newID = v7();

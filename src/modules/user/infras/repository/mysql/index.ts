@@ -1,5 +1,5 @@
 import { User, UserCondDTO, UserUpdateDTO } from "@modules/user/model";
-import { BaseCommandRepositorySequelize, BaseQueryRepositorySequelize, BaseRepositorySequelize } from "@share/repository/repo-sequelize";
+import { BaseCommandRepositorySequelize, BaseQueryRepositorySequelize, BaseRepositorySequelize } from "@share/repository/sequelize";
 import { Sequelize } from "sequelize";
 
 export class MySQLUserRepository extends BaseRepositorySequelize<User, UserCondDTO, UserUpdateDTO> {

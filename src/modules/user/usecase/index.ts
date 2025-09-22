@@ -1,11 +1,11 @@
 import { IRepository, TokenPayload } from "@share/interface";
-import { ErrDataNotFound } from "@share/model/base-error";
 import { PagingDTO } from "@share/model/paging";
 import { v7 } from "uuid";
 import { IUserUseCase } from "../interface";
-import { Gender, Role, Status, User, UserCondDTO, userCondDTOSchema, UserLoginDTO, UserRegistrationDTO, UserRegistrationDTOSchema, UserUpdateDTO, userUpdateDTOSchema } from "../model";
+import { Gender, Role, Status, User, UserCondDTO, UserCondDTOSchema, UserLoginDTO, UserRegistrationDTO, UserRegistrationDTOSchema, UserUpdateDTO, UserUpdateDTOSchema } from "../model";
 import { ErrEmailExisted } from "../model/error";
 import bcrypt from "bcryptjs";
+import { ErrorDataNotFound } from "@share/model/base-errors";
 
 export class UserUseCase implements IUserUseCase {
   constructor(private readonly repository: IRepository<User, UserCondDTO, UserUpdateDTO>) { }
@@ -58,18 +58,18 @@ export class UserUseCase implements IUserUseCase {
     const data = await this.repository.get(id);
 
     if (!data || data.status === Status.DELETED) {
-      throw ErrDataNotFound;
+      throw ErrorDataNotFound;
     }
 
     return data;
   }
 
   async update(id: string, data: UserUpdateDTO): Promise<boolean> {
-    const dto = userUpdateDTOSchema.parse(data);
+    const dto = UserUpdateDTOSchema.parse(data);
 
     const product = await this.repository.get(id);
     if (!product || product.status === Status.DELETED) {
-      throw ErrDataNotFound;
+      throw ErrorDataNotFound;
     }
 
     await this.repository.update(id, dto);
@@ -78,7 +78,7 @@ export class UserUseCase implements IUserUseCase {
   }
 
   async list(cond: UserCondDTO, paging: PagingDTO): Promise<User[]> {
-    const parsedCond = userCondDTOSchema.parse(cond);
+    const parsedCond = UserCondDTOSchema.parse(cond);
 
     return await this.repository.list(parsedCond, paging);
   }
@@ -87,7 +87,7 @@ export class UserUseCase implements IUserUseCase {
     const product = await this.repository.get(id);
 
     if (!product || product.status === Status.DELETED) {
-      throw ErrDataNotFound;
+      throw ErrorDataNotFound;
     }
 
     await this.repository.delete(id, false);

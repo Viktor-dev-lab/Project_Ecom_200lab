@@ -1,17 +1,17 @@
-import type { PagingDTO } from "../model/paging";
+import { PagingDTO } from "@share/model/paging";
 
-export interface IRepository<Entity, Filter, updateDTO> extends IQueryRepository<Entity, Filter>, ICommandRepository<Entity, updateDTO> {}
+export interface IRepository<Entity, Cond, UpdateDTO> extends IQueryRepository<Entity, Cond>, ICommandRepository<Entity, UpdateDTO> { }
 
-export interface IQueryRepository<Entity, Filter> {
+export interface IQueryRepository<Entity, Cond> {
   get(id: string): Promise<Entity | null>;
-  list(filter: Filter, paging: PagingDTO): Promise<Array<Entity>>;
-  findByCond(cond: Filter): Promise<Entity | null>;
+  findByCond(cond: Cond): Promise<Entity | null>;
+  list(cond: Cond, paging: PagingDTO): Promise<Array<Entity>>;
 }
 
-export interface ICommandRepository<Entity, updateDTO> {
+export interface ICommandRepository<Entity, UpdateDTO> {
   insert(data: Entity): Promise<boolean>;
-  update(id: string, data: updateDTO): Promise<boolean>;
-  delete(id: string, isHardDelete: boolean): Promise<boolean>;
+  update(id: string, data: UpdateDTO): Promise<boolean>;
+  delete(id: string, isHard: boolean): Promise<boolean>;
 }
 
 export interface ICommandHandler<Cmd, Result> {
@@ -22,10 +22,39 @@ export interface IQueryHandler<Query, Result> {
   query(query: Query): Promise<Result>;
 }
 
-export interface IUseCase<CreateDTO, UpdateDTO, Entity, Filter> {
+export interface IUseCase<CreateDTO, UpdateDTO, Entity, Cond> {
   create(data: CreateDTO): Promise<string>;
   getDetail(id: string): Promise<Entity | null>;
-  list(cond: Filter, paging: PagingDTO): Promise<Array<Entity>>;
+  list(cond: Cond, paging: PagingDTO): Promise<Array<Entity>>;
   update(id: string, data: UpdateDTO): Promise<boolean>;
   delete(id: string): Promise<boolean>;
+}
+
+///
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user'
+}
+
+export interface TokenPayload {
+  userId: string;
+  role: UserRole;
+}
+
+export interface Requester extends TokenPayload { }
+
+export interface ITokenProvider {
+  generateToken(payload: TokenPayload): Promise<string>;
+  verifyToken(token: string): Promise<TokenPayload | null>;
+}
+
+// Authorization
+export type TokenIntrospectResult = {
+  payload: TokenPayload | null;
+  error?: Error;
+  isOk: boolean;
+}
+
+export interface ITokenIntrospect {
+  introspect(token: string): Promise<TokenIntrospectResult>;
 }

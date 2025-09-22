@@ -25,13 +25,10 @@ export abstract class BaseHttpService<CreateDTO, UpdateDTO, Entity, Filter> {
 
       const result = await this.useCase.create(data);
       res.status(200).json({ data: result });
-    } catch (err: any) {
-      if (err.statusCode) {
-        res.status(err.statusCode).json({ message: err.message });
-      } else {
-        console.log(err);
-        res.status(500).json({ message: 'Internal server error', error: err });
-      }
+    } catch (error: any) {
+      res.status(400).json({
+        message: (error as Error).message,
+      });
     }
   }
 
@@ -40,8 +37,10 @@ export abstract class BaseHttpService<CreateDTO, UpdateDTO, Entity, Filter> {
       const { id } = req.params;
       const category = await this.useCase.getDetail(id);
       res.status(200).json({ data: category });
-    } catch (err) {
-      res.status(500).json({ message: 'Internal server error', error: err });
+    } catch (error) {
+      res.status(400).json({
+        message: (error as Error).message,
+      });
     }
   }
 
@@ -63,8 +62,10 @@ export abstract class BaseHttpService<CreateDTO, UpdateDTO, Entity, Filter> {
       const result = await this.useCase.update(id, data);
       res.status(200).json({ data: result });
 
-    } catch (err) {
-      res.status(500).json({ message: 'Internal server error', error: err });
+    } catch (error) {
+      res.status(400).json({
+        message: (error as Error).message,
+      });
     }
   }
 
@@ -73,8 +74,10 @@ export abstract class BaseHttpService<CreateDTO, UpdateDTO, Entity, Filter> {
       const { id } = req.params;
       const result = await this.useCase.delete(id);
       res.status(200).json({ data: result });
-    } catch (err) {
-      res.status(500).json({ message: 'Internal server error', error: err });
+    } catch (error) {
+      res.status(400).json({
+        message: (error as Error).message,
+      });
     }
   }
 
@@ -96,8 +99,10 @@ export abstract class BaseHttpService<CreateDTO, UpdateDTO, Entity, Filter> {
       const result = await this.useCase.list(cond, paging);
 
       res.status(200).json({ data: result, paging, filter: cond });
-    } catch (err) {
-      res.status(500).json({ message: 'Internal server error', error: err });
+    } catch (error) {
+      res.status(400).json({
+        message: (error as Error).message,
+      });
     }
   }
 }

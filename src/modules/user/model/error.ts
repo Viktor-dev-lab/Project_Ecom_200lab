@@ -6,3 +6,4 @@ export const ErrBirthdayInvalid = new Error ('Birthday is invalid');
 export const ErrGenderInvalid = new Error ('Gender is invalid');
 export const ErrRoleInvalid = new Error ('Role is invalid');
 export const ErrEmailExisted = new Error ('Email is already existed');
+export const ErrStatusInvalid = new Error ('Status is invalid');

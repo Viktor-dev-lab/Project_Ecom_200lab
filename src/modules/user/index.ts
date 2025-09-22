@@ -14,7 +14,7 @@ export const setupUserHexagon = (sequelize: Sequelize) => {
 
   const router = Router();
 
-  router.post('/users', httpService.createAPI.bind(httpService));
+  router.post('/register', httpService.createAPI.bind(httpService));
   router.get('/users/:id', httpService.getDetailAPI.bind(httpService));
   router.get('/users', httpService.listAPI.bind(httpService));
   router.patch('/users/:id', httpService.updateAPI.bind(httpService));

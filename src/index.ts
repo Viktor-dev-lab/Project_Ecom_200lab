@@ -1,10 +1,12 @@
 import 'module-alias/register';
 import express, { Express, Request, Response } from "express";
 import { config } from "dotenv";
+import { sequelize } from "@share/component/sequelize";
+
 import { setupCategoryHexagon } from "@modules/category/index";
 import { setupBrandHexagon } from "@modules/brand/index";
-import { sequelize } from "@share/component/sequelize";
-import { setupProductHexagon } from './modules/product';
+import { setupProductHexagon } from '@modules/product/index';
+import { setupUserHexagon } from '@modules/user/index';
 
 // Load environment variables
 config();
@@ -27,6 +29,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/v1", setupCategoryHexagon(sequelize));
 app.use("/v1", setupBrandHexagon(sequelize));
 app.use("/v1", setupProductHexagon(sequelize));
+app.use("/v1", setupUserHexagon(sequelize));
 
 // database connection
 const startServer = async () => {
