@@ -4,7 +4,7 @@ import {CreateCommand, GetDetailQuery, type DeleteCommand, type UpdateCommand} f
 import {z} from 'zod'
 import { PagingDTOSchema, type PagingDTO } from "../../../../share/model/paging";
 import type { Brand } from '../../model/model';
-import type { ICommandHandler, IQueryHandler } from '../../../../share/interface';
+import type { ICommandHandler, IQueryHandler } from '../../../../share/interface/handler.interface';
 
 export class BrandHttpService {
 

@@ -1,4 +1,4 @@
-import type { ICommandHandler} from "../../../../share/interface";
+import type { ICommandHandler} from "../../../../share/interface/handler.interface";
 import { ErrorDataNotFound } from "../../../../share/model/base-errors";
 import { ModelStatus } from "../../../../share/model/base-model";
 import type { DeleteCommand, IBrandRepository } from "../../interface";

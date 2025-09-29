@@ -1,4 +1,4 @@
-import { IUseCase } from "@share/interface";
+import { IUseCase } from "@share/interface/usecase.interface";
 import { ProductCondDTO, ProductCreateDTO, ProductUpdateDTO } from "../model/dto";
 import { Product, ProductBrand, ProductCategory } from "../model/product";
 

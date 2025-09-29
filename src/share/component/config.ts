@@ -22,5 +22,9 @@ export const config = {
       idle: 60000,   // Thời gian tối đa (miligiây) giữ một kết nối trước khi bị đóng
     },
     logging: true,
+  },
+  accessToken: {
+    secretKey: process.env.JWT_SECRET || '200L@b.io',
+    expiresIn: '7d'
   }
 }

@@ -1,7 +1,7 @@
 import { v7 } from "uuid";
 import type { CreateCommand, IBrandRepository} from "../../interface";
 import type { Brand } from "../../model/model";
-import type { ICommandHandler } from "../../../../share/interface";
+import type { ICommandHandler } from "../../../../share/interface/handler.interface";
 import { ModelStatus } from "../../../../share/model/base-model";
 
 export class CreateNewBrandCmdHandler implements ICommandHandler<CreateCommand, string> {

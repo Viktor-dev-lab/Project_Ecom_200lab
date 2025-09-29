@@ -1,4 +1,5 @@
-import type { IQueryHandler, IQueryRepository } from "../../../../share/interface";
+import type { IQueryHandler} from "../../../../share/interface/handler.interface";
+import type { IQueryRepository } from "@share/interface/repository.interface"
 import type { GetDetailQuery} from "../../interface";
 import type { BrandFilterDTO } from "../../model/dto";
 import type { Brand } from "../../model/model";

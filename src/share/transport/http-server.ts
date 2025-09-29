@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IUseCase } from "../interface";
+import { IUseCase } from "../interface/usecase.interface";
 import { PagingDTOSchema } from "../model/paging";
 import z from "zod";
 
@@ -43,7 +43,6 @@ export abstract class BaseHttpService<CreateDTO, UpdateDTO, Entity, Filter> {
       });
     }
   }
-
 
   async updateAPI(req: Request, res: Response) {
     try {

@@ -7,3 +7,5 @@ export const ErrGenderInvalid = new Error ('Gender is invalid');
 export const ErrRoleInvalid = new Error ('Role is invalid');
 export const ErrEmailExisted = new Error ('Email is already existed');
 export const ErrStatusInvalid = new Error ('Status is invalid');
+export const ErrInvalidEmailAndPassword = new Error ('Invalid email ands password');
+export const ErrUserNotActive = new Error ('User is not active');

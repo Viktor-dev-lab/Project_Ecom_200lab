@@ -1,5 +1,5 @@
-import { IUseCase } from "@/share/interface";
-import { IRepository } from "@/share/interface";
+import { IUseCase } from "@/share/interface/usecase.interface";
+import { IRepository } from "@/share/interface/repository.interface";
 import { CategoryFilterDTO, CategoryCreateDTO, CategoryUpdateDTO } from "../model/dto";
 import { Category } from "../model/model";
 

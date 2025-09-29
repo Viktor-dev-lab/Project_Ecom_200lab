@@ -1,4 +1,5 @@
-import { Gender, Role, Status } from "@modules/user/model";
+import { Gender, Status } from "@modules/user/model";
+import {UserRole as Role} from "@share/model/base-model";
 import { DataTypes } from "sequelize";
 
 import { Model, Sequelize } from "sequelize";

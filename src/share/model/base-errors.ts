@@ -1,6 +1,6 @@
 export const ErrorDataNotFound = new Error("Data Not Found");
 export const ErrNameDuplicate = new Error("Name already exists");
-
+export const ErrInvalidToken = new Error("Invalid token");
 
 
 // Brand

@@ -1,5 +1,5 @@
 import {PagingDTO} from "../../../share/model/paging"
-import {IRepository} from "../../../share/interface"
+import {IRepository} from "../../../share/interface/repository.interface"
 import {BrandUpdateDTO, BrandCreateDTO, BrandFilterDTO} from "../model/dto"
 import {Brand} from "../model/model"
 

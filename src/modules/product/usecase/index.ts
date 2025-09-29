@@ -1,4 +1,4 @@
-import { IRepository } from "@share/interface";
+import { IRepository } from "@share/interface/repository.interface";
 import { ErrorDataNotFound } from "@share/model/base-errors";
 import { ModelStatus } from "@share/model/base-model";
 import { PagingDTO } from "@share/model/paging";

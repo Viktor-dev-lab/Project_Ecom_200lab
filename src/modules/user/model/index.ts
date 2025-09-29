@@ -1,15 +1,11 @@
 import { z } from "zod";
 import { ErrBirthdayInvalid, ErrEmailInvalid, ErrFirstNameAtLeast2Chars, ErrGenderInvalid, ErrLastNameAtLeast2Chars, ErrPasswordAtLeast6Chars, ErrRoleInvalid, ErrStatusInvalid } from "./error";
+import { UserRole } from "@share/model/base-model";
 
 export enum Gender {
   MALE = 'male',
   FEMALE = 'female',
   UNKNOWN = 'unknown',
-}
-
-export enum Role {
-  USER = 'user',
-  ADMIN = 'admin',
 }
 
 export enum Status {
@@ -32,7 +28,7 @@ export const UserSchema = z.object({
   address: z.string().nullable().optional(),
   birthday: z.date(ErrBirthdayInvalid.message).nullable().optional(),
   gender: z.enum(Gender, ErrGenderInvalid.message),
-  role: z.enum(Role, ErrRoleInvalid.message),
+  role: z.enum(UserRole, ErrRoleInvalid.message),
   status: z.enum(Status, ErrStatusInvalid.message).optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
@@ -63,7 +59,7 @@ export const UserUpdateDTOSchema = z.object({
   address: z.string().nullable().optional(),
   birthday: z.date(ErrBirthdayInvalid.message).nullable().optional(),
   gender: z.enum(Gender, ErrGenderInvalid.message).optional(),
-  role: z.enum(Role, ErrRoleInvalid.message).optional(),
+  role: z.enum(UserRole, ErrRoleInvalid.message).optional(),
   status: z.enum(Status, ErrStatusInvalid.message).optional(),
 });
 
@@ -75,7 +71,7 @@ export const UserCondDTOSchema = z.object({
   phone: z.string().nullable().optional(),
   address: z.string().nullable().optional(),
   gender: z.enum(Gender, ErrGenderInvalid.message).optional(),
-  role: z.enum(Role, ErrRoleInvalid.message).optional(),
+  role: z.enum(UserRole, ErrRoleInvalid.message).optional(),
   status: z.enum(Status, ErrStatusInvalid.message).optional(),
 });
 

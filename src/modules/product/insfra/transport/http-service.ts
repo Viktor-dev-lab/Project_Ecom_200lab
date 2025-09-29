@@ -7,12 +7,18 @@ import { Request, Response } from "express";
 
 
 export class ProductHTTPService extends BaseHttpService<ProductCreateDTO, ProductUpdateDTO, Product, ProductCondDTO> {
+ 
+  private readonly productBrandRepository: IBrandQueryRepository;
+  private readonly productCategoryRepository: ICategoryQueryRepository;
+
   constructor(
     useCase: IProductUseCase,
-    private readonly productBrandRepository: IBrandQueryRepository,
-    private readonly productCategoryRepository: ICategoryQueryRepository
+    productBrandRepository: IBrandQueryRepository,
+    productCategoryRepository: ICategoryQueryRepository
   ) {
     super(useCase, ProductCreateSchema, ProductUpdateSchema, ProductCondSchema);
+    this.productBrandRepository = productBrandRepository;
+    this.productCategoryRepository = productCategoryRepository;
   }
 
   async getDetailAPI(req: Request, res: Response) {

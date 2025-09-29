@@ -1,5 +1,7 @@
 import { Op, Sequelize } from "sequelize";
-import { ICommandRepository, IQueryRepository, IRepository } from "@share/interface";
+import { ICommandRepository, IQueryRepository} from "@share/interface/repository.interface";
+import { IRepository } from "@/share/interface/repository.interface"
+
 import type { PagingDTO } from "@share/model/paging";
 import { ModelStatus } from "@share/model/base-model";
 
