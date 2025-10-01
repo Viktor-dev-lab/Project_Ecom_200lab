@@ -15,10 +15,21 @@ export class UserUseCase implements IUserUseCase {
 
   async verifyToken(token: string): Promise<TokenPayload> {
     const payload = await jwtProvider.verifyToken(token);
+
     if (!payload) {
       throw ErrInvalidToken;
     }
-    return payload;
+    
+    const user = await this.repository.get(payload.userId);
+    if (!user){
+      throw ErrorDataNotFound;
+    }
+
+    if (user.status === Status.DELETED || user.status === Status.INACTIVE || user.status === Status.BANNED){
+      throw ErrorDataNotFound;
+    }
+
+    return {userId: user.id, role: user.role};
   }
 
   async login(data: UserLoginDTO): Promise<string> {

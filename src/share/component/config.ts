@@ -26,5 +26,7 @@ export const config = {
   accessToken: {
     secretKey: process.env.JWT_SECRET || '200L@b.io',
     expiresIn: '7d'
-  }
+  },
+  verify_token_url: process.env.VERIFY_TOKEN_URL || "http://localhost:3000",
+  port: process.env.PORT || "3000"
 }
