@@ -1,5 +1,5 @@
 import 'module-alias/register';
-import express, { Express, Request, Response } from "express";
+import express, { Express, Request, Response, type NextFunction } from "express";
 import { config } from "@share/component/config";
 import { sequelize } from "@share/component/sequelize";
 import morgan from "morgan";
@@ -11,6 +11,7 @@ import { setupUserHexagon } from '@modules/user/index';
 import { TokenIntrospectRPCClient } from "@share/repository/verify-token.rpc";
 import { setupMiddlewares } from './share/middleware';
 import type { ApplicationContext } from './share/interface/middleware.interface';
+import { responseErr } from './share/app-error';
 
 // Initialize Express app
 const app: Express = express();
@@ -33,6 +34,11 @@ app.use("/v1", setupCategoryHexagon(sequelize, appContext));
 app.use("/v1", setupBrandHexagon(sequelize, appContext));
 app.use("/v1", setupProductHexagon(sequelize, appContext));
 app.use("/v1", setupUserHexagon(sequelize, appContext));
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  responseErr(err, res);
+  return next();
+});
 
 // database connection
 const startServer = async () => {

@@ -9,6 +9,7 @@ import bcrypt from "bcryptjs";
 import { ErrInvalidToken, ErrorDataNotFound } from "@share/model/base-errors";
 import { jwtProvider } from "@share/component/jwt";
 import { UserRole } from "@share/model/base-model";
+import { AppError } from "@share/app-error";
 
 export class UserUseCase implements IUserUseCase {
   constructor(private readonly repository: IRepository<User, UserCondDTO, UserUpdateDTO>) { }
@@ -38,18 +39,21 @@ export class UserUseCase implements IUserUseCase {
     // 1. Find user by email
     const user = await this.repository.findByCond({ email: dto.email });
     if (!user) {
-      throw ErrInvalidEmailAndPassword;
+      throw AppError.from(ErrInvalidEmailAndPassword, 400)
+        .withLog(`Login failed: email ${dto.email} not found`);
     }
 
     // 2. Check password
     const isPasswordValid = await bcrypt.compare(dto.password, user.password);
     if (!isPasswordValid) {
-      throw ErrInvalidEmailAndPassword;
+      throw AppError.from(ErrInvalidEmailAndPassword, 400)
+        .withLog(`Login failed: invalid password for email ${dto.email}`);
     }
 
     // 3. check status
     if (user.status !== Status.ACTIVE) {
-      throw ErrUserNotActive;
+      throw AppError.from(ErrUserNotActive, 400)
+        .withLog(`Login failed: user ${dto.email} has status ${user.status}`);
     }
 
     // 4. Generate token

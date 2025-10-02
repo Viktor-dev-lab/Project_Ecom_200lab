@@ -1,10 +1,11 @@
-import {Request, Response} from 'express'
-import {BrandCreateSchema, BrandUpdateSchema, BrandFilterDTOSchema, BrandFilterDTO, BrandUpdateDTO} from "../../model/dto"
-import {CreateCommand, GetDetailQuery, type DeleteCommand, type UpdateCommand} from "../../interface"
-import {z} from 'zod'
+import { Request, Response } from 'express'
+import { BrandCreateSchema, BrandUpdateSchema, BrandFilterDTOSchema, BrandFilterDTO, BrandUpdateDTO } from "../../model/dto"
+import { CreateCommand, GetDetailQuery, type DeleteCommand, type UpdateCommand } from "../../interface"
+import { z } from 'zod'
 import { PagingDTOSchema, type PagingDTO } from "../../../../share/model/paging";
 import type { Brand } from '../../model/model';
 import type { ICommandHandler, IQueryHandler } from '../../../../share/interface/handler.interface';
+import { responseErr } from '@share/app-error';
 
 export class BrandHttpService {
 
@@ -13,48 +14,46 @@ export class BrandHttpService {
     private readonly getDetailQueryHandler: IQueryHandler<GetDetailQuery, Brand | null>,
     private readonly deleteCmdHandler: ICommandHandler<DeleteCommand, boolean>,
     private readonly updateCmdHandler: ICommandHandler<UpdateCommand, boolean>,
-    private readonly listQueryHandler: IQueryHandler<{filter: BrandFilterDTO, paging: PagingDTO}, Brand[]>,
-  ) {}
-  
-  async createBrandAPI(req: Request, res: Response){
-      const { success, data, error } = BrandCreateSchema.safeParse(req.body);
-    
-      if (!success) {
-        const tree = z.treeifyError(error);
-        res.status(400).json({
-          message: tree,
-        });
-    
-        return;
-      }
+    private readonly listQueryHandler: IQueryHandler<{ filter: BrandFilterDTO, paging: PagingDTO }, Brand[]>,
+  ) { }
 
-      const command: CreateCommand = { cmd: data };
+  async createBrandAPI(req: Request, res: Response) {
+    try {
+      const command: CreateCommand = { cmd: req.body };
       const result = await this.createCmdHandler.execute(command);
-      res.status(200).json({data: result});
+      res.status(200).json({ data: result });
+    } catch (error) {
+      responseErr(error as Error, res);
+    }
   }
 
-  async getDetailBrandAPI(req: Request, res: Response){
-    const { id } = req.params;
-    const brand = await this.getDetailQueryHandler.query({ id });
-    res.status(200).json({data: brand});
+
+  async getDetailBrandAPI(req: Request, res: Response) {
+    try{
+      const { id } = req.params;
+      const brand = await this.getDetailQueryHandler.query({ id });
+      res.status(200).json({ data: brand });
+    } catch (error){
+      responseErr(error as Error, res);
+    }
   }
 
-  
+
   async updateBrandAPI(req: Request, res: Response) {
-    const {id} = req.params;
+    const { id } = req.params;
     const { success, data, error } = BrandUpdateSchema.safeParse(req.body);
 
     if (!success) {
-        const tree = z.treeifyError(error);
-        res.status(400).json({
-          message: tree,
-        });
-    
-        return;
-      }
+      const tree = z.treeifyError(error);
+      res.status(400).json({
+        message: tree,
+      });
 
-      const result = await this.updateCmdHandler.execute({id, dto: data});
-      res.status(200).json({data: result});
+      return;
+    }
+
+    const result = await this.updateCmdHandler.execute({ id, dto: data });
+    res.status(200).json({ data: result });
 
   }
 
