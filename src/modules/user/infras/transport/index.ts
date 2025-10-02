@@ -3,6 +3,7 @@ import { User, UserCondDTO, UserCondDTOSchema, UserRegistrationDTO, UserRegistra
 import { BaseHttpService } from "@share/transport/http-server";
 import { z } from "zod";
 import { Request, Response } from "express";
+import { responseErr } from "@share/app-error";
 
 export class UserHTTPService extends BaseHttpService<UserRegistrationDTO, UserUpdateDTO, User, UserCondDTO> {
   constructor(readonly useCase: IUserUseCase) {
@@ -31,25 +32,8 @@ export class UserHTTPService extends BaseHttpService<UserRegistrationDTO, UserUp
   }
 
   async loginAPI(req: Request, res: Response): Promise<void> {
-    try {
-      const { success, data, error } = UserLoginDTOSchema.safeParse(req.body);
-      if (!success) {
-        const tree = z.treeifyError(error);
-        res.status(400).json({
-          message: tree,
-        });
-        return;
-      }
-
-      const token = await this.useCase.login(data);
-      res.status(200).json({ token });
-
-    } catch (error: any) {
-      res.status(400).json({
-        message: (error as Error).message,
-      });
-    }
-
+    const token = await this.useCase.login(req.body);
+    res.status(200).json({ token });
   }
 
   async profileAPI(req: Request, res: Response): Promise<void> {

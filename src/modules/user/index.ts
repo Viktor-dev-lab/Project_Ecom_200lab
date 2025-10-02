@@ -7,6 +7,9 @@ import { UserUseCase } from "./usecase";
 import { ApplicationContext } from "@share/interface/middleware.interface";
 import { UserRole } from "@share/model/base-model";
 
+import { validate } from "@share/middleware/validate";
+import { UserLoginDTOSchema } from "./model";
+
 export const setupUserHexagon = (sequelize: Sequelize, appContext: ApplicationContext) => {
   init(sequelize);
 
@@ -20,7 +23,7 @@ export const setupUserHexagon = (sequelize: Sequelize, appContext: ApplicationCo
   const adminRole = mdlFactory.allowRoles([UserRole.ADMIN]);
 
   router.post('/register', httpService.registerAPI.bind(httpService));
-  router.post('/login', httpService.loginAPI.bind(httpService));
+  router.post('/login', validate(UserLoginDTOSchema), httpService.loginAPI.bind(httpService));
   router.get('/profile', httpService.profileAPI.bind(httpService));
 
   router.get('/users/:id', auth, adminRole, httpService.getDetailAPI.bind(httpService));

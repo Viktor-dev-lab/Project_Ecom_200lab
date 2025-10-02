@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES6",                          // biên dịch code ra JS ES6
+    "target": "ES2022",                          // biên dịch code ra JS ES6
     "module": "commonjs",                     // dùng CommonJS (require), hợp với Node.js nếu không xài "type": "module"
     "strict": true,                           // bật strict mode TypeScript
     "esModuleInterop": true,                  // cho phép import mặc dù module là CommonJS

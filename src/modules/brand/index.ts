@@ -11,6 +11,9 @@ import { ListBrandQueryHandler } from "./usecase/query/list-brand";
 import { modelName } from "./infras/repository/dto";
 import { ApplicationContext } from "@share/interface/middleware.interface";
 import { UserRole } from "@share/model/base-model";
+import { validate } from "@share/middleware/validate";
+import { BrandCreateSchema } from "./model/dto";
+
 
 export const setupBrandHexagon = (sequelize: Sequelize, appContext: ApplicationContext) => {
   init(sequelize);
@@ -36,7 +39,7 @@ export const setupBrandHexagon = (sequelize: Sequelize, appContext: ApplicationC
   const auth = mdlFactory.auth;
   const adminRole = mdlFactory.allowRoles([UserRole.ADMIN]);
 
-  router.post('/brands',auth, adminRole, httpService.createBrandAPI.bind(httpService));
+  router.post('/brands',validate(BrandCreateSchema), auth, adminRole, httpService.createBrandAPI.bind(httpService));
   router.get('/brands/:id', httpService.getDetailBrandAPI.bind(httpService));
   router.get('/brands', httpService.listBrandAPI.bind(httpService));
   router.patch('/brands/:id',auth, adminRole, httpService.updateBrandAPI.bind(httpService));
