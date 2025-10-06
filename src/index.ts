@@ -24,7 +24,6 @@ app.use(morgan('dev'));
 const introspector = new TokenIntrospectRPCClient(config.verify_token_url);
 const appContext: ApplicationContext = { middlewareFactory: setupMiddlewares(introspector),};
 
-
 // Routes
 app.get("/", (req: Request, res: Response) => {
   res.status(200).send("Hello 200Lab!");
