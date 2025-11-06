@@ -72,7 +72,7 @@ Add the following scripts to your package.json:
 
 "scripts": {
   "start": "node dist/index.js",
-  "dev": "nodemon"
+  "dev": "nodemon --config nodemon.json"
 }
 
 6. : Run the Application

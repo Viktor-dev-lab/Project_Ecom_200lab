@@ -1,3 +1,4 @@
+import type { IQueryRepository } from "@share/interface/repository.interface";
 import { IBrandQueryRepository, ICategoryQueryRepository, IProductUseCase } from "@modules/product/interface";
 import { ProductCondDTO, ProductCreateDTO, ProductUpdateDTO } from "@modules/product/model/dto";
 import { ProductCreateSchema, ProductUpdateSchema, ProductCondSchema } from "@modules/product/model/dto";
@@ -7,18 +8,21 @@ import { Request, Response } from "express";
 
 
 export class ProductHTTPService extends BaseHttpService<ProductCreateDTO, ProductUpdateDTO, Product, ProductCondDTO> {
- 
+
   private readonly productBrandRepository: IBrandQueryRepository;
   private readonly productCategoryRepository: ICategoryQueryRepository;
+  private readonly prodQueryRepo: IQueryRepository<Product, ProductCondDTO>
 
   constructor(
     useCase: IProductUseCase,
     productBrandRepository: IBrandQueryRepository,
-    productCategoryRepository: ICategoryQueryRepository
+    productCategoryRepository: ICategoryQueryRepository,
+    prodQueryRepo: IQueryRepository<Product, ProductCondDTO>
   ) {
     super(useCase, ProductCreateSchema, ProductUpdateSchema, ProductCondSchema);
     this.productBrandRepository = productBrandRepository;
     this.productCategoryRepository = productCategoryRepository;
+    this.prodQueryRepo = prodQueryRepo
   }
 
   async getDetailAPI(req: Request, res: Response) {
@@ -49,6 +53,12 @@ export class ProductHTTPService extends BaseHttpService<ProductCreateDTO, Produc
         message: (error as Error).message,
       });
     }
+  }
+
+  async listProductByIdsAPI(req: Request, res: Response) {
+    const { ids } = req.body;
+    const result = await this.prodQueryRepo.listByIds(ids);
+    res.status(200).json({ data: result });
   }
 }
 

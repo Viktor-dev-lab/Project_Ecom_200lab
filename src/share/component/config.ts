@@ -5,8 +5,9 @@ dotenv.config();
 
 export const config = {
   rpc: {
-    productBrand: process.env.RPC_PRODUCT_BRAND_URL || "http://localhost:3000",
-    productCategory: process.env.RPC_PRODUCT_CATEGORY_URL || "http://localhost:3000",
+    productBrand: process.env.RPC_PRODUCT_BRAND_URL || "http://localhost:8000",
+    productCategory: process.env.RPC_PRODUCT_CATEGORY_URL || "http://localhost:8000",
+    product: process.env.RPC_PRODUCT_URL || 'http://localhost:8000',
   },
   mysql: {
     database: process.env.DB_NAME || "",
