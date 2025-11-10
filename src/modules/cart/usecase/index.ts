@@ -1,7 +1,7 @@
 import { AppError, ErrForbidden } from "@share/app-error";
 import { v7 } from "uuid";
 import { ICartRepository, ICartUseCase, IProductQueryRepository } from "../interface";
-import { AddCartItemDTO, addCartItemDTOSchema, CartItem } from "../model";
+import { AddCartItemDTO, addCartItemDTOSchema, CartItem, UpdateCartItemDTO, updateCartItemDTOSchema } from "../model";
 import { ErrCartItemNotFound, ErrProductNotEnoughQuantity, ErrProductNotFound } from "../model/error";
 
 export class CartUseCase implements ICartUseCase {
@@ -40,6 +40,7 @@ export class CartUseCase implements ICartUseCase {
 
     return true;
   }
+
   async removeProductFromCart(id: string, requesterId: string): Promise<boolean> {
     const existingItem = await this.repo.get(id);
 
@@ -54,6 +55,7 @@ export class CartUseCase implements ICartUseCase {
     await this.repo.delete(id, true);
     return true;
   }
+
   async listItems(requesterId: string): Promise<Array<CartItem> | null> {
     const cartItems = await this.repo.listItems(requesterId);
     if (!cartItems || cartItems.length === 0) return [];
@@ -69,6 +71,29 @@ export class CartUseCase implements ICartUseCase {
         ...item, product: product || null,
       } as CartItem;
     });
+    console.log(enrichedItems)
     return enrichedItems;
+  }
+
+  async updateProductQuantites(dto: UpdateCartItemDTO[], requesterId: string): Promise<boolean> {
+    console.log(requesterId)
+    dto = dto.map(item => updateCartItemDTOSchema.parse(item));
+    const productIds = dto.map(item =>  item.productId);
+    const products = await this.productQueryRepo.findByIds(productIds);
+
+    const productQuatityMap = new Map<string, number>(); // (Id, quantity)
+    products.forEach(product => productQuatityMap.set(product.id, product.quantity));
+
+    dto.map(item => {
+      const userUpdateQuantity = item.quantity;
+      const userDataQuantity = productQuatityMap.get(item.productId) || 0
+
+      if (userUpdateQuantity > userDataQuantity){
+        throw  AppError.from(ErrProductNotEnoughQuantity, 400);
+      }
+    })
+
+    await this.repo.updateMany(dto, requesterId);
+    return true;
   }
 }

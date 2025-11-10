@@ -6,10 +6,12 @@ export interface ICartUseCase {
   addProductToCart(dto: AddCartItemDTO): Promise<boolean>;
   removeProductFromCart(id: string, requesterId: string): Promise<boolean>;
   listItems(requesterId: string): Promise<Array<CartItem> | null >;
+  updateProductQuantites(dtos: UpdateCartItemDTO[], requesterId: string): Promise<boolean>;
 }
 
 export interface ICartRepository extends IRepository<CartItem, CartItemCondDTO, UpdateCartItemDTO> {
   listItems(userId: string): Promise<Array<CartItem> | null>;
+  updateMany(dtos: UpdateCartItemDTO[], requesterId: string): Promise<boolean>;
  }
 
 export interface IProductQueryRepository {

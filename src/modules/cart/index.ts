@@ -20,17 +20,13 @@ export function setupCartHexagon(sequelize: Sequelize, appContext: ApplicationCo
   const mdlFactory = appContext.middlewareFactory;
 
   router.post('/carts', mdlFactory.auth, cartHttpService.addProductToCartAPI.bind(cartHttpService));
+  router.get('/carts', mdlFactory.auth, cartHttpService.listItemsAPI.bind(cartHttpService));
+  router.patch('/carts', mdlFactory.auth, cartHttpService.updateProductQuantityAPI.bind(cartHttpService));
   router.delete('/carts/:id', mdlFactory.auth, cartHttpService.removeProductFromCartAPI.bind(cartHttpService));
 
   return router;
 }
 
-// Shoping cart's main features:
-// 1. Add a product to cart
-// 2. Remove a product from cart
-// 3. Update product quantity (one or many) in cart
-// 4. Clear cart
-// 5. Create Order from cart (Order module)
 
 
 

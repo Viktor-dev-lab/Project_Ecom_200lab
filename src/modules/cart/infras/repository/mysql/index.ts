@@ -16,6 +16,10 @@ export class MySQLCartRepository extends BaseRepositorySequelize<CartItem, CartI
   async listItems(userId: string): Promise<Array<CartItem> | null> {
     return (this.queryRepo as MYSQLCartQueryRepository).listItems(userId);
   }
+
+  async updateMany(dtos: UpdateCartItemDTO[], requesterId: string): Promise<boolean> {
+    return (this.cmdRepo as MYSQLCartCommandRepository).updateMany(dtos, requesterId);
+  }
 }
 
 export class MYSQLCartQueryRepository extends BaseQueryRepositorySequelize<CartItem, CartItemCondDTO> {
@@ -42,5 +46,19 @@ export class MYSQLCartQueryRepository extends BaseQueryRepositorySequelize<CartI
 export class MYSQLCartCommandRepository extends BaseCommandRepositorySequelize<CartItem, UpdateCartItemDTO> {
   constructor(readonly sequelize: Sequelize, readonly modelName: string) {
     super(sequelize, modelName);
+  }
+
+   async updateMany(dtos: UpdateCartItemDTO[], requesterId: string): Promise<boolean> {
+      await this.sequelize.transaction(async t => {
+        for (let i = 0; i < dtos.length; i++){
+          const {productId, attribute, quantity} = dtos[i];
+          await this.sequelize.models[this.modelName].update(
+            {quantity},
+            {where: {productId, userId: requesterId, attribute}, transaction: t}
+          )
+        }
+        return true;
+      })
+      return true;
   }
 } 
