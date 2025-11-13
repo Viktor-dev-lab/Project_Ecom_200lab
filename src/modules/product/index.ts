@@ -24,7 +24,7 @@ export function setupProductHexagon(sequelize: Sequelize, appContext: Applicatio
   );
 
   const productHttpService = new ProductHTTPService(
-    productUseCase, cachedProductBrandRepository, cachedProductCategoryRepository
+    productUseCase, cachedProductBrandRepository, cachedProductCategoryRepository, productRepository
   );
 
   const router = Router();
@@ -38,5 +38,7 @@ export function setupProductHexagon(sequelize: Sequelize, appContext: Applicatio
   router.patch('/products/:id', auth, adminRole, productHttpService.updateAPI.bind(productHttpService));
   router.delete('/products/:id', auth, adminRole, productHttpService.deleteAPI.bind(productHttpService));
 
+  // RPC
+  router.post('/rpc/products/by-ids', productHttpService.listProductByIdsAPI.bind(productHttpService));
   return router;
 }
