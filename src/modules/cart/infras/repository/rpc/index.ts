@@ -12,15 +12,15 @@ export class CartProductRPCRepo implements IProductQueryRepository {
       const { data } = await axios.get(`${this.productServiceUrl}/v1/products/${id}`);
       const product = data.data;
 
-    // convert product model -> cart product model
-    // Ex: data mapper or adapter
-    return {
-      id: product.id,
-      name: product.name,
-      images: product.images,
-      salePrice: product.salePrice,
-      price: product.price,
-      quantity: product.quantity
+      // convert product model -> cart product model
+      // Ex: data mapper or adapter
+      return {
+        id: product.id,
+        name: product.name,
+        images: product.images,
+        salePrice: product.salePrice,
+        price: product.price,
+        quantity: product.quantity
       };
     } catch (error) {
       return null;
@@ -28,18 +28,20 @@ export class CartProductRPCRepo implements IProductQueryRepository {
   }
 
   async findByIds(ids: string[]): Promise<Array<CartProduct>> {
-    const { data } = await axios.post(`${this.productServiceUrl}/v1/rpc/products/by-ids`, { ids });
-    const products = data.data;
-
-    // convert product model -> cart product model
-    // Ex: data mapper or adapter
-    return products.map((product: any) => ({
-      id: product.id,
-      name: product.name,
-      images: product.images,
-      salePrice: product.salePrice,
-      price: product.price,
-      quantity: product.quantity
-    }));
+    try {
+      const { data } = await axios.post(`${this.productServiceUrl}/v1/rpc/products/by-ids`, { ids });
+      const products = data.data;
+      return products.map((product: any) => ({
+        id: product.id,
+        name: product.name,
+        images: product.images,
+        salePrice: product.salePrice,
+        price: product.price,
+        quantity: product.quantity
+      }));
+    } catch (error: any) {
+      console.error("findByIds error:", error?.message || error);
+      throw error;
+    }
   }
 }

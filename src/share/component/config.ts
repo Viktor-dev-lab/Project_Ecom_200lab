@@ -8,6 +8,7 @@ export const config = {
     productBrand: process.env.RPC_PRODUCT_BRAND_URL || "http://localhost:8000",
     productCategory: process.env.RPC_PRODUCT_CATEGORY_URL || "http://localhost:8000",
     product: process.env.RPC_PRODUCT_URL || 'http://localhost:8000',
+    cart: process.env.RPC_PRODUCT_URL || 'http://localhost:8000'
   },
   mysql: {
     database: process.env.DB_NAME || "",

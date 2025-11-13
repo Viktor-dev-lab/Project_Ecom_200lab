@@ -64,20 +64,39 @@ export class CartUseCase implements ICartUseCase {
     const products = await this.productQueryRepo.findByIds(productIds);
     if (!products || products.length === 0) return cartItems;
 
-    const productMap = new Map(products.map((p) => [p.id, p]));
-    const enrichedItems = cartItems.map((item) => {
-      const product = productMap.get(item.productId);
-      return {
-        ...item, product: product || null,
-      } as CartItem;
+    const itemMap = new Map<string, CartItem>() // (productId, CartItem)
+    cartItems.forEach((item) => { itemMap.set(item.productId, item) });
+
+    products.forEach((product) => {
+      const item = itemMap.get(product.id)
+      if (item) item.product = product
     });
-    return enrichedItems;
+
+    return cartItems;
+  }
+
+  async listItemsRPC(requesterId: string): Promise<Array<CartItem> | null> {
+    const cartItems = await this.repo.listItems(requesterId);
+    if (!cartItems || cartItems.length === 0) return [];
+
+    const productIds = cartItems.map((item) => item.productId);
+    const products = await this.productQueryRepo.findByIds(productIds);
+    if (!products || products.length === 0) return cartItems;
+
+    const itemMap = new Map<string, CartItem>() // (productId, CartItem)
+    cartItems.forEach((item) => { itemMap.set(item.productId, item) });
+
+    products.forEach((product) => {
+      const item = itemMap.get(product.id)
+      if (item) item.product = product
+    });
+
+    return cartItems;
   }
 
   async updateProductQuantites(dto: UpdateCartItemDTO[], requesterId: string): Promise<boolean> {
-    console.log(requesterId)
     dto = dto.map(item => updateCartItemDTOSchema.parse(item));
-    const productIds = dto.map(item =>  item.productId);
+    const productIds = dto.map(item => item.productId);
     const products = await this.productQueryRepo.findByIds(productIds);
 
     const productQuatityMap = new Map<string, number>(); // (Id, quantity)
@@ -87,8 +106,8 @@ export class CartUseCase implements ICartUseCase {
       const userUpdateQuantity = item.quantity;
       const userDataQuantity = productQuatityMap.get(item.productId) || 0
 
-      if (userUpdateQuantity > userDataQuantity){
-        throw  AppError.from(ErrProductNotEnoughQuantity, 400);
+      if (userUpdateQuantity > userDataQuantity) {
+        throw AppError.from(ErrProductNotEnoughQuantity, 400);
       }
     })
 

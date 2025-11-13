@@ -13,6 +13,7 @@ import { setupMiddlewares } from './share/middleware';
 import type { ApplicationContext } from './share/interface/middleware.interface';
 import { responseErr } from './share/app-error';
 import { setupCartHexagon } from './modules/cart';
+import { setupOrderHexagon } from './modules/order';
 
 // Initialize Express app
 const app: Express = express();
@@ -35,6 +36,7 @@ app.use("/v1", setupBrandHexagon(sequelize, appContext));
 app.use("/v1", setupProductHexagon(sequelize, appContext));
 app.use("/v1", setupUserHexagon(sequelize, appContext));
 app.use("/v1", setupCartHexagon(sequelize, appContext))
+app.use("/v1", setupOrderHexagon(sequelize, appContext))
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   responseErr(err, res);

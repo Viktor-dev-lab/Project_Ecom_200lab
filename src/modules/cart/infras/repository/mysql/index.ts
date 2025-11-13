@@ -49,16 +49,16 @@ export class MYSQLCartCommandRepository extends BaseCommandRepositorySequelize<C
   }
 
    async updateMany(dtos: UpdateCartItemDTO[], requesterId: string): Promise<boolean> {
-      await this.sequelize.transaction(async t => {
-        for (let i = 0; i < dtos.length; i++){
-          const {productId, attribute, quantity} = dtos[i];
-          await this.sequelize.models[this.modelName].update(
-            {quantity},
-            {where: {productId, userId: requesterId, attribute}, transaction: t}
-          )
-        }
-        return true;
-      })
+    await this.sequelize.transaction(async t => {
+      for (let i = 0; i < dtos.length; i++){
+        const {productId, attribute, quantity} = dtos[i];
+        await this.sequelize.models[this.modelName].update(
+          {quantity},
+          {where: {productId, userId: requesterId, attribute}, transaction: t}
+        )
+      }
       return true;
+    })
+    return true;
   }
 } 

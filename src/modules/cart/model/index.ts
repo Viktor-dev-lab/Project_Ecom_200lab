@@ -37,7 +37,6 @@ export const cartItemCondDTOSchema = z.object({
 });
 
 export const updateCartItemDTOSchema = z.object({
-  userId: z.string(),
   productId: z.string(),
   attribute: z.string().nullable().optional().default(''),
   quantity: z.number(),
@@ -45,7 +44,6 @@ export const updateCartItemDTOSchema = z.object({
 
 export type CartProduct = z.infer<typeof cartProductSchema>;
 export type CartItem = z.infer<typeof cartItemSchema>;
-
 export type AddCartItemDTO = z.infer<typeof addCartItemDTOSchema>;
 export type CartItemCondDTO = z.infer<typeof cartItemCondDTOSchema>;
 export type UpdateCartItemDTO = z.infer<typeof updateCartItemDTOSchema>;

@@ -24,6 +24,8 @@ export function setupCartHexagon(sequelize: Sequelize, appContext: ApplicationCo
   router.patch('/carts', mdlFactory.auth, cartHttpService.updateProductQuantityAPI.bind(cartHttpService));
   router.delete('/carts/:id', mdlFactory.auth, cartHttpService.removeProductFromCartAPI.bind(cartHttpService));
 
+  // RPC
+  router.post('/rpc/carts/items', cartHttpService.listItemsRPC.bind(cartHttpService));
   return router;
 }
 
