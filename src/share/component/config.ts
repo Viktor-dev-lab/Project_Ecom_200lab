@@ -10,6 +10,12 @@ export const config = {
     product: process.env.RPC_PRODUCT_URL || 'http://localhost:8000',
     cart: process.env.RPC_PRODUCT_URL || 'http://localhost:8000'
   },
+  redis: {
+    host: process.env.REDIS_HOST || "localhost",
+    port: parseInt(process.env.REDIS_PORT as string) || 6380,
+    password: process.env.REDIS_PASSWORD || "",
+    url: process.env.REDIS_URL || "redis://localhost:6380",
+  },
   mysql: {
     database: process.env.DB_NAME || "",
     username: process.env.DB_USERNAME || "",

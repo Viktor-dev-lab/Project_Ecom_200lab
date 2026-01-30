@@ -14,6 +14,11 @@ import type { ApplicationContext } from './share/interface/middleware.interface'
 import { responseErr } from './share/app-error';
 import { setupCartHexagon } from './modules/cart';
 import { setupOrderHexagon } from './modules/order';
+import { RedisClient } from './share/component/redis';
+import { EvtMyCreatedEvent, MyCreatedEvent } from './share/event';
+import { Queue} from 'bullmq';
+import { Worker, Job } from "bullmq";
+
 
 // Initialize Express app
 const app: Express = express();
@@ -43,11 +48,63 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   return next();
 });
 
-// database connection
+const redisConnection = {
+  host: config.redis.host,
+  port: config.redis.port,
+  password: config.redis.password,
+}
+
+// Start Server
 const startServer = async () => {
   try {
-    await sequelize.authenticate();
+    await sequelize.authenticate(); // DB connection
     console.log("Connection has been established successfully.");
+    
+    // Event system (Redis)
+    const testEvt = EvtMyCreatedEvent;
+    const queue = new Queue(testEvt, {connection: redisConnection});
+
+    const worker1 = new Worker(
+      testEvt,
+      async (job: Job) => {
+        console.log("Worker 1 processed job:", job.data);
+      },
+      {
+        connection: redisConnection,
+        removeOnComplete: { count: 10 },
+      }
+    );
+
+     const worker2 = new Worker(
+      testEvt,
+      async (job: Job) => {
+        console.log("Worker 2 processed job:", job.data);
+      },
+      {
+        connection: redisConnection,
+        removeOnComplete: { count: 10 },
+      }
+    );
+
+    for (let i = 0; i < 5; i++) {
+      const payload = { name: `Test Event ${i + 1}` };
+      const event = MyCreatedEvent.create(payload, "system");
+      await queue.add(testEvt, event.plainObject(), {jobId: `job-${i + 1}`, delay: 1000});
+    }
+    
+    // Redis pub/sub
+    await RedisClient.init(config.redis.url);
+    await RedisClient.getInstance().subscribe(EvtMyCreatedEvent, (msg: string) => {
+      const event = MyCreatedEvent.from(JSON.parse(msg));
+      console.log("Received 2 event via Redis Pub/Sub:", event);
+    });
+
+    await RedisClient.getInstance().subscribe(EvtMyCreatedEvent, (msg: string) => {
+      const event = MyCreatedEvent.from(JSON.parse(msg));
+      console.log("Received 1 event via Redis Pub/Sub:", event);
+    });
+    await RedisClient.getInstance().publish(MyCreatedEvent.create({ name: "Hello via Redis Pub/Sub" }, "system"));
+
 
     const port = parseInt(config.port);
 
