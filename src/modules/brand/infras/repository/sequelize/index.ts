@@ -1,6 +1,6 @@
 import {Sequelize } from "sequelize";
-import { type Brand } from "../../model/model";
-import type { BrandFilterDTO, BrandUpdateDTO } from "../../model/dto";
+import { type Brand } from "../../../model/model";
+import type { BrandFilterDTO, BrandUpdateDTO } from "../../../model/dto";
 import { BaseCommandRepositorySequelize, BaseQueryRepositorySequelize, BaseRepositorySequelize } from "@share/repository/sequelize";
 
 export class MySQLBrandRepository extends BaseRepositorySequelize<Brand, BrandFilterDTO, BrandUpdateDTO> {

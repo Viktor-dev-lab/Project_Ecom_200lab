@@ -15,7 +15,7 @@ export class CartHttpService {
   async removeProductFromCartAPI(req: Request, res: Response) {
     const requester = res.locals.requester;
     const { userId } = requester;
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
 
     const result = await this.cartUseCase.removeProductFromCart(id, userId);
     res.status(200).json({ data: result });

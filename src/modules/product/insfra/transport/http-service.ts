@@ -27,7 +27,7 @@ export class ProductHTTPService extends BaseHttpService<ProductCreateDTO, Produc
 
   async getDetailAPI(req: Request, res: Response) {
     try {
-      const { id } = req.params;
+      const { id } = req.params as { id: string };
       const result = await this.useCase.getDetail(id);
 
       if (!result) {

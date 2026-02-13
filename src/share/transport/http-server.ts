@@ -34,7 +34,7 @@ export abstract class BaseHttpService<CreateDTO, UpdateDTO, Entity, Filter> {
 
   async getDetailAPI(req: Request, res: Response) {
     try {
-      const { id } = req.params;
+      const { id } = req.params as { id: string };
       const category = await this.useCase.getDetail(id);
       res.status(200).json({ data: category });
     } catch (error) {
@@ -46,7 +46,7 @@ export abstract class BaseHttpService<CreateDTO, UpdateDTO, Entity, Filter> {
 
   async updateAPI(req: Request, res: Response) {
     try {
-      const { id } = req.params;
+      const { id } = req.params as { id: string };
       const { success, data, error } = this.UpdateDTOSchema.safeParse(req.body);
 
       if (!success) {
@@ -70,7 +70,7 @@ export abstract class BaseHttpService<CreateDTO, UpdateDTO, Entity, Filter> {
 
   async deleteAPI(req: Request, res: Response) {
     try {
-      const { id } = req.params;
+      const { id } = req.params as { id: string };
       const result = await this.useCase.delete(id);
       res.status(200).json({ data: result });
     } catch (error) {

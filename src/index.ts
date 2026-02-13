@@ -18,7 +18,8 @@ import { RedisClient } from './share/component/redis';
 import { EvtMyCreatedEvent, MyCreatedEvent } from './share/event';
 import { Queue} from 'bullmq';
 import { Worker, Job } from "bullmq";
-
+import { prisma } from './share/lib/prisma';
+  
 
 // Initialize Express app
 const app: Express = express();
@@ -59,6 +60,9 @@ const startServer = async () => {
   try {
     await sequelize.authenticate(); // DB connection
     console.log("Connection has been established successfully.");
+    
+    const user = await prisma.user.findMany({where: {firstName: "Xuan"}});
+    console.log("Prisma connected user:", user);
     
     // Event system (Redis)
     const testEvt = EvtMyCreatedEvent;

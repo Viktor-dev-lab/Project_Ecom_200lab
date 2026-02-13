@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import type { ModelStatus } from "../../../../share/model/base-model";
+import type { ModelStatus } from "../../../../../share/model/base-model";
 
 export class BrandModel extends Model {
   declare id: string;
@@ -7,7 +7,7 @@ export class BrandModel extends Model {
   declare status: ModelStatus;
   declare image?: string | null;
   declare description?: string | null;
-  declare tag_line?: string | null;
+  declare tagline?: string | null;
   declare createdAt: Date;  
   declare updatedAt: Date;
 }
@@ -30,7 +30,7 @@ export function init(sequelize: Sequelize) {
         type: DataTypes.STRING(200),
         allowNull: true,
       },
-      tag_line: {
+      tagline: {
         type: DataTypes.STRING(150),
         allowNull: true,
         field: "tag_line",

@@ -30,7 +30,7 @@ export class BrandHttpService {
 
   async getDetailBrandAPI(req: Request, res: Response) {
     try{
-      const { id } = req.params;
+      const { id } = req.params as { id: string };
       const brand = await this.getDetailQueryHandler.query({ id });
       res.status(200).json({ data: brand });
     } catch (error){
@@ -40,7 +40,7 @@ export class BrandHttpService {
 
 
   async updateBrandAPI(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     const { success, data, error } = BrandUpdateSchema.safeParse(req.body);
 
     if (!success) {
@@ -58,7 +58,7 @@ export class BrandHttpService {
   }
 
   async deleteBrandAPI(req: Request, res: Response) {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     const result = await this.deleteCmdHandler.execute({ id, isHardDelete: false });
     res.status(200).json({ data: result });
   }
